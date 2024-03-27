@@ -133,4 +133,20 @@
 		<limit lower="0.0" upper="${PI/2}" effort="${effort}" velocity="${velocity}"></limit>
 	</joint>
 
+	<link name="rgb_camera">
+		<visual>
+			<origin xyz="-0.08 0.125 0.125" rpy="-${PI/2} 0 -${PI/2}"></origin>
+			<geometry>
+				<mesh filename="package://arduinobot_description/meshes/pi_camera.STL"
+					scale="0.01 0.01 0.01"></mesh>
+			</geometry>
+		</visual>
+	</link>
+
+	<joint name="joint_6" type="fixed">
+		<parent link="base_link" />
+		<child link="rgb_camera" />
+		<origin rpy="0 -0.5 1.57" xyz="0 0.45 0.2" />
+	</joint>
+
 </robot>
