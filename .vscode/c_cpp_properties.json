@@ -7,6 +7,8 @@
       },
       "includePath": [
         "/opt/ros/galactic/include/**",
+        "/home/giakhang/arduinobot_ws/src/arduinobot_controller/include/**",
+        "/home/giakhang/arduinobot_ws/src/arduinobot_msgs/include/**",
         "/usr/include/**"
       ],
       "name": "ROS",
