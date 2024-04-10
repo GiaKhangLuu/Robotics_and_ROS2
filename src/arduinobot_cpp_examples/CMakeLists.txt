@@ -1,3 +1,6 @@
+# This file acts as a sort of instruction sheed that tells the compiler
+# how it should translate our C++ scripts into executable files.
+
 cmake_minimum_required(VERSION 3.8)
 project(arduinobot_cpp_examples)
 
@@ -5,6 +8,9 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
+# Firstly, before building our script and making them executable. We
+# need to declare the support packages that we use the dependencies 
+# that we use to develop the functionalities of our node
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
@@ -14,7 +20,10 @@ find_package(rclcpp_action REQUIRED)
 find_package(rclcpp_components REQUIRED)
 find_package(moveit_ros_planning_interface REQUIRED)
 
+# Now we can proceed to instruct the compiler on how it should build
+# and install our script
 add_executable(simple_publisher src/simple_publisher.cpp)
+# Declare the dependencies to this executable.
 ament_target_dependencies(simple_publisher rclcpp std_msgs)
 
 add_executable(simple_subscriber src/simple_subscriber.cpp)
@@ -64,14 +73,15 @@ rclcpp_components_register_node(simple_action_client
   EXECUTABLE simple_action_client_node
 )
 
-install(TARGETS
+# Install this script
+install(TARGETS  # specify the executable that we want to install
   simple_publisher
   simple_subscriber
   simple_parameter
   simple_service_server
   simple_service_client
   simple_moveit_interface
-  DESTINATION lib/${PROJECT_NAME}
+  DESTINATION lib/${PROJECT_NAME}  # specify where we want to install the executable above
 )
 
 install(TARGETS
@@ -90,3 +100,5 @@ if(BUILD_TESTING)
 endif()
 
 ament_package()
+
+# Before building the workspace, we need also to declare the dependencies that we use
