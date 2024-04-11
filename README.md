@@ -65,3 +65,9 @@ ros2 topic hz /your_topic_name
 
 This command analyzes the messages that are published in the topic and calculates
 the frequency of the publishing.
+
+```
+ros2 topic pub /your_topic_name type_of_a_message message_content
+```
+
+Publish a new message to a specific topic.
