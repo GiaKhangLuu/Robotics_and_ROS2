@@ -7,6 +7,7 @@ endif()
 
 find_package(ament_cmake REQUIRED)
 
+# Install to recognize by ROS2
 install(
   DIRECTORY meshes urdf models launch rviz
   DESTINATION share/${PROJECT_NAME}

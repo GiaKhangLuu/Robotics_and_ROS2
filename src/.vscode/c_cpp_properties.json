@@ -1,0 +1,28 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/giakhang/arduinobot_ws/install/arduinobot_msgs/include/**",
+        "/opt/ros/galactic/include/**",
+        "/home/giakhang/arduinobot_ws/src/arduinobot_controller/include/**",
+        "/home/giakhang/arduinobot_ws/src/arduinobot_cpp_examples/include/**",
+        "/home/giakhang/arduinobot_ws/src/arduinobot_firmware/include/**",
+        "/home/giakhang/arduinobot_ws/src/arduinobot_moveit/include/**",
+        "/home/giakhang/arduinobot_ws/src/arduinobot_msgs/include/**",
+        "/home/giakhang/arduinobot_ws/src/arduinobot_remote/include/**",
+        "/home/giakhang/arduinobot_ws/src/arduinobot_utils/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

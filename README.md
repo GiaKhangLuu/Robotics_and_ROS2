@@ -71,3 +71,9 @@ ros2 topic pub /your_topic_name type_of_a_message message_content
 ```
 
 Publish a new message to a specific topic.
+
+```
+ros2 launch urdf_tutorial display.launch.py model:=abs/path/to/your/urdf/model
+```
+
+Display our URDF model.

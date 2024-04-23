@@ -1,0 +1,7 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/home/giakhang/arduinobot_ws/install/arduinobot_py_examples/lib/python3.8/site-packages",
+        "/home/giakhang/arduinobot_ws/install/arduinobot_msgs/lib/python3.8/site-packages",
+        "/opt/ros/galactic/lib/python3.8/site-packages"
+    ]
+}

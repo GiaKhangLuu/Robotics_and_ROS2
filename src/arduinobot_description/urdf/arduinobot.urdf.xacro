@@ -1,10 +1,24 @@
 <?xml version="1.0"?>
 
+<!-- We are using the xacro format, not plain urdf => we need to indicate where the definition of this format is located  -->
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="arduinobot">
 
 	<xacro:include filename="$(find arduinobot_description)/urdf/arduinobot_gazebo.xacro" />
 	<xacro:include filename="$(find arduinobot_description)/urdf/arduinobot_ros2_control.xacro" />
 
+	<!-- Useful XACRO Variables (Properties) -->
+	<!-- 
+		Since we are going to use the same actuators, so the same motors for all the 
+		all movable joints of our robotic arm, basically their mechanical and 
+		kinematic limits will be the same. So that we can create some properties 
+		to make use of the reusability.
+	-->
+	<!--
+		An actuator is a component of a machine that produces force, torque, or 
+		displacement, usually in a controlled way, when an electrical, pneumatic 
+		or hydraulic input is supplied to it in a system (called an 
+		actuating system).
+	-->
 	<xacro:property name="PI" value="3.14159" />
 	<xacro:property name="effort" value="30.0" />
 	<xacro:property name="velocity" value="10.0" />
@@ -28,14 +42,22 @@
 		</transmission>
 	</xacro:macro>
 
+	<!-- ************ LINK ************  -->
 
+	<!-- This link serves to anchor the manipulator to the world reference frame -->
 	<link name="world" />
 
 	<link name="base_link">
 		<xacro:default_inertial mass="1.0" />
+		<!-- Visualize by the visual tag -->
 		<visual>
-			<origin rpy="0 0 0" xyz="-0.5 -0.5 0" />
+			<!-- How to place and rotate the mesh w.r.t. the xyz axis of its link -->
+			<!-- These values represent the placement and the orientation of the mesh relative to the link it belongs (the xyz axis of the `base_link`) -->
+			<!-- In other words, this `origin` tag is used for visualization and simulation. It is different with the `origin` tag of `joint` -->
+			<!-- `x = y = -0.5` means that we want to place this mesh at the position of x = -0.5 and y = -0.5 w.r.t. the xyz axis of the `base_link`  -->
+			<origin rpy="0 0 0" xyz="-0.5 -0.5 0" />  <!-- `rpy` defines the orientation and `xyz` defines the position -->
 			<geometry>
+				<!-- Mesh file to render -->
 				<mesh filename="package://arduinobot_description/meshes/basement.STL"
 					scale="0.01 0.01 0.01" />
 			</geometry>
@@ -48,12 +70,6 @@
 			</geometry>
 		</collision>
 	</link>
-
-	<joint name="virtual_joint" type="fixed">
-		<parent link="world" />
-		<child link="base_link" />
-		<origin rpy="0 0 0" xyz="0 0 0" />
-	</joint>
 
 	<link name="base_plate">
 		<xacro:default_inertial mass="0.1" />
@@ -73,14 +89,6 @@
 		</collision>
 	</link>
 
-	<joint name="joint_1" type="revolute">
-		<parent link="base_link"></parent>
-		<child link="base_plate"></child>
-		<axis xyz="0 0 1"></axis>
-		<origin rpy="0 0 0" xyz="0 0 0.307"></origin>
-		<limit lower="-${PI/2}" upper="${PI/2}" effort="${effort}" velocity="${velocity}"></limit>
-	</joint>
-
 	<link name="forward_drive_arm">
 		<xacro:default_inertial mass="0.1" />
 		<visual>
@@ -98,14 +106,6 @@
 			</geometry>
 		</collision>
 	</link>
-
-	<joint name="joint_2" type="revolute">
-		<parent link="base_plate"></parent>
-		<child link="forward_drive_arm"></child>
-		<axis xyz="1 0 0"></axis>
-		<origin rpy="0 0 0" xyz="-0.02 0 0.35"></origin>
-		<limit lower="-${PI/2}" upper="${PI/2}" effort="${effort}" velocity="${velocity}"></limit>
-	</joint>
 
 	<link name="horizontal_arm">
 		<xacro:default_inertial mass="0.1" />
@@ -125,14 +125,6 @@
 		</collision>
 	</link>
 
-	<joint name="joint_3" type="revolute">
-		<parent link="forward_drive_arm"></parent>
-		<child link="horizontal_arm"></child>
-		<axis xyz="1 0 0"></axis>
-		<origin rpy="0 0 0" xyz="0 0 0.8"></origin>
-		<limit lower="-${PI/2}" upper="${PI/2}" effort="${effort}" velocity="${velocity}"></limit>
-	</joint>
-
 	<link name="claw_support">
 		<xacro:default_inertial mass="0.05" />
 		<visual>
@@ -150,12 +142,6 @@
 			</geometry>
 		</collision>
 	</link>
-
-	<joint name="horizontal_arm_to_claw_support" type="fixed">
-		<parent link="horizontal_arm"></parent>
-		<child link="claw_support"></child>
-		<origin xyz="0 0.82 0" rpy="0 0 0"></origin>
-	</joint>
 
 	<link name="gripper_right">
 		<xacro:default_inertial mass="0.01" />
@@ -193,23 +179,6 @@
 		</collision>
 	</link>
 
-	<joint name="joint_4" type="revolute">
-		<parent link="claw_support"></parent>
-		<child link="gripper_right"></child>
-		<axis xyz="0 0 1"></axis>
-		<origin rpy="0 0 0" xyz="-0.04 0.13 -0.1"></origin>
-		<limit lower="-${PI/2}" upper="0.0" effort="${effort}" velocity="${velocity}"></limit>
-	</joint>
-
-	<joint name="joint_5" type="revolute">
-		<parent link="claw_support"></parent>
-		<child link="gripper_left"></child>
-		<axis xyz="0 0 1"></axis>
-		<origin rpy="0 0 0" xyz="-0.22 0.13 -0.1"></origin>
-		<mimic joint="joint_4" multiplier="-1"></mimic>
-		<limit lower="0.0" upper="${PI/2}" effort="${effort}" velocity="${velocity}"></limit>
-	</joint>
-
 	<link name="rgb_camera">
 		<xacro:default_inertial mass="0.001" />
 		<visual>
@@ -228,6 +197,83 @@
 		</collision>
 	</link>
 
+	<!-- *********** JOINTS *********** -->
+
+	<!-- `fixed` means the `child` cannot move, rotate or translate w.r.t the `parent` -->
+	<joint name="virtual_joint" type="fixed"> 
+		<parent link="world" />
+		<child link="base_link" />
+		<!-- How to place and rotate the axis of the `child` link w.r.t. the `parent` link -->
+		<!-- This `origin` tag express the transformation matrix between the `child` and the `world`. The type is `fixed` means that the transformation matrix is zero -->
+		<!-- `rpy = xyz = 0 0 0` means that the `base_link` and `world` have the same center, so the `base_link` is exactly oriented and positioned the same as the world frame (xyz axis of the `base_link` exactly overlap the xyz of the `world`) -->
+		<!-- We can the the `origin` tag express how we place and rotate the XYZ axes of the `child` and `parent` link -->
+		<origin rpy="0 0 0" xyz="0 0 0" />
+	</joint>
+
+	<!-- `revolute` means the `child` can rotate w.r.t. its `parent` (movable joint) -->
+	<joint name="joint_1" type="revolute">
+		<parent link="base_link"></parent>
+		<child link="base_plate"></child>
+		<axis xyz="0 0 1"></axis>  <!-- Rotation axis: 0 0 1 means that the `child` rotate around the z axis -->
+		<!-- `rpy` express the rotation and `xyz` express the orientation of the `child` w.r.t. its `parent` -->
+		<!-- the `base_plate` is oriented the same way as the `base_link`, so the `rpy` = 0 0 0. Also, the `base_plate` is translated along the z axis by 3.07cm -->
+		<origin rpy="0 0 0" xyz="0 0 0.307"></origin>  
+		<!-- The limit of the rotation ranges from -90 degree to 90 degree  -->
+		<limit lower="-${PI/2}" upper="${PI/2}" effort="${effort}" velocity="${velocity}"></limit>
+	</joint>
+
+
+	<joint name="joint_2" type="revolute">
+		<parent link="base_plate"></parent>
+		<child link="forward_drive_arm"></child>
+		<axis xyz="1 0 0"></axis>
+		<origin rpy="0 0 0" xyz="0.02 0 0.35"></origin>
+		<limit lower="-${PI/2}" upper="${PI/2}" effort="${effort}" velocity="${velocity}"></limit>
+	</joint>
+
+
+	<joint name="joint_3" type="revolute">
+		<parent link="forward_drive_arm"></parent>
+		<child link="horizontal_arm"></child>
+		<axis xyz="1 0 0"></axis>
+		<origin rpy="0 0 0" xyz="0 0 0.8"></origin>
+		<limit lower="-${PI/2}" upper="${PI/2}" effort="${effort}" velocity="${velocity}"></limit>
+	</joint>
+
+
+	<joint name="horizontal_arm_to_claw_support" type="fixed">
+		<parent link="horizontal_arm"></parent>
+		<child link="claw_support"></child>
+		<origin xyz="0 0.82 0" rpy="0 0 0"></origin>
+	</joint>
+
+
+	<joint name="joint_4" type="revolute">
+		<parent link="claw_support"></parent>
+		<child link="gripper_right"></child>
+		<axis xyz="0 0 1"></axis>
+		<origin rpy="0 0 0" xyz="-0.04 0.13 -0.1"></origin>
+		<limit lower="-${PI/2}" upper="0.0" effort="${effort}" velocity="${velocity}"></limit>
+	</joint>
+
+	<joint name="joint_5" type="revolute">
+		<parent link="claw_support"></parent>
+		<child link="gripper_left"></child>
+		<axis xyz="0 0 1"></axis>
+		<origin rpy="0 0 0" xyz="-0.22 0.13 -0.1"></origin>
+		<!-- 
+			Since the gripper left and right will move together, they are composed of a gear
+			system that ensures that they open and close together so that they open and 
+			close by the same angle => We should use `mimic` tag to perform this action.
+
+			multiplier="-1" indicates that gripper left and right rotate in an opposite 
+			direction
+		-->
+		<mimic joint="joint_4" multiplier="-1"></mimic>
+		<limit lower="0.0" upper="${PI/2}" effort="${effort}" velocity="${velocity}"></limit>
+	</joint>
+
+
 	<joint name="joint_6" type="fixed">
 		<parent link="base_link" />
 		<child link="rgb_camera" />
@@ -239,6 +285,6 @@
 	<xacro:default_transmission number="3"/>
 	<xacro:default_transmission number="4"/>
 
-
-
 </robot>
+
+<!-- We need to INSTALL this `urdf` folder and `meshes` folder so that these folders are recognized within our package -->

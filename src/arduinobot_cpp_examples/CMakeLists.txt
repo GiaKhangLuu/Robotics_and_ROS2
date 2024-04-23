@@ -19,6 +19,7 @@ find_package(arduinobot_msgs REQUIRED)
 find_package(rclcpp_action REQUIRED)
 find_package(rclcpp_components REQUIRED)
 find_package(moveit_ros_planning_interface REQUIRED)
+find_package(rclcpp_lifecycle REQUIRED)
 
 # Now we can proceed to instruct the compiler on how it should build
 # and install our script
@@ -73,6 +74,9 @@ rclcpp_components_register_node(simple_action_client
   EXECUTABLE simple_action_client_node
 )
 
+add_executable(simple_lifecycle_node src/simple_lifecycle_node.cpp)
+ament_target_dependencies(simple_lifecycle_node rclcpp rclcpp_lifecycle std_msgs)
+
 # Install this script
 install(TARGETS  # specify the executable that we want to install
   simple_publisher
@@ -81,6 +85,7 @@ install(TARGETS  # specify the executable that we want to install
   simple_service_server
   simple_service_client
   simple_moveit_interface
+  simple_lifecycle_node
   DESTINATION lib/${PROJECT_NAME}  # specify where we want to install the executable above
 )
 
