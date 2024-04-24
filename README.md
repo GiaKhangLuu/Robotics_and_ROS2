@@ -77,3 +77,53 @@ ros2 launch urdf_tutorial display.launch.py model:=abs/path/to/your/urdf/model
 ```
 
 Display our URDF model.
+
+```
+ros2 param list
+```
+
+Provide a list of all the parameters that are available for each node.
+
+```
+ros2 param get name_of_node name_of_parameter
+```
+
+See the value of parameter of a specified node.
+
+```
+ros2 run your_package_name your_node_name --ros-args -p name_of_parameter:=value_of_parameter
+```
+
+Start a specified node and set value for its parameter.
+
+```
+ros2 param set name_of_node name_of_parameter new_value_of_that_parameter
+```
+
+Update value of a parameter of a specified node.
+
+```
+ros2 run robot_state_publisher robot_state_publisher --ros-args -p robot_description:="$(xacro abs/path/to/your/xacro/urdf/model)"
+```
+
+Publish the URDF model within ROS2 topic, convert xacro urdf model into a plain urdf model and pass to the robot_description parameter.
+This node publishes the position and the orientation of all the links of the robot.
+
+```
+ros2 run joint_state_publisher_gui joint_state_publisher_gui 
+```
+
+Start a graphical interface with some sliders which corresponds to all movable joints of our robot which we can use then to move
+around our URDF model. 
+
+```
+ros2 run rviz2 rviz2 
+```
+
+Launch RVIZ.
+
+```
+ros2 launch name_of_the_package name_of_the_launch_file
+```
+
+Start the launch file.

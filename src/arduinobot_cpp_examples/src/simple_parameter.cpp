@@ -5,8 +5,6 @@ values to those parameters.
 
 Alan: 2024/04/23
 */
-
-
 #include <rclcpp/rclcpp.hpp>
 #include <rcl_interfaces/msg/set_parameters_result.hpp>
 #include <string>

@@ -23,9 +23,26 @@
 	<xacro:property name="effort" value="30.0" />
 	<xacro:property name="velocity" value="10.0" />
 
+	<!--
+		Since we are assuming that the inertia matrix is the same for all the 
+		links, so to avoid rewriting the code, we can define a reusable 
+		portion of code by use a tool called `macro` which can be compared
+		to the function.
+		With a macro, we can define a reusable portion of code simply by
+		using the name of the macro, and we can also pass some parameters
+		to the macro as if it was a function.
+	-->
 	<xacro:macro name="default_inertial" params="mass">
 		<inertial>
+
+			<!-- Mass of the body -->
 			<mass value="${mass}"></mass>
+
+			<!-- 
+				Six attributes that indicate the value of the inertia matrix of this rigid body.
+				The logical meaning of this matrix is that the inertia of the link will be the 
+				same in all the directions without any multiplicative factor.
+			-->
 			<inertia ixx="1.0" ixy="0.0" ixz="0.0"
 				iyy="1.0" iyz="0.0"
 				izz="1.0"></inertia>
@@ -48,7 +65,15 @@
 	<link name="world" />
 
 	<link name="base_link">
+		<!-- 
+			The inertia of a body, or in this case of a link, is a measure of its resistance to 
+			change in the motion, and it strongly depends on the mass of the body itself, and
+			also this mass is distributed.
+			This is the physical parameters of a rigid body that help understand how it moves
+			under the action of external forces.
+		-->
 		<xacro:default_inertial mass="1.0" />
+
 		<!-- Visualize by the visual tag -->
 		<visual>
 			<!-- How to place and rotate the mesh w.r.t. the xyz axis of its link -->
@@ -62,6 +87,12 @@
 					scale="0.01 0.01 0.01" />
 			</geometry>
 		</visual>
+
+		<!-- 
+			In order for Gazebo to simulate, Gazebo needs to know the volume occupied in the space of each link, not
+			just visualization. Therefore, we need another tag that is called `collision` to define the volume.
+			For example, we can set the `base_link` occupy the exact same space as defined in the mesh.
+		-->	
 		<collision>
 			<origin rpy="0 0 0" xyz="-0.5 -0.5 0" />
 			<geometry>
