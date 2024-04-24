@@ -49,11 +49,45 @@
 		</inertial>
 	</xacro:macro>
 
+	<!-- 
+		Since all the movable links of our robot will be actuated by the same motors
+		with the same mechanical and electrical characteristics, so we can create a new
+		macro.
+	-->
 	<xacro:macro name="default_transmission" params="number">
+		<!-- 
+			ROS2 control library requires that a tranmission is defined for each movable
+			joint of the robot within the URDF model.
+			The `transmission` tag indicates the presence of a mechanical transmission that
+			connects each motor of the robot to each link of the arm.
+		-->
 		<transmission name="transmission_${number}">
+
+			<!-- 
+				Declare what type of plugin we want to use for the simultation of the 
+				transmission logic. 
+				Since the transmission of our robot is very simple, we can use the
+				SimpleTransmission implementation.
+			-->
 			<plugin>transmission_interface/SimpleTransmission</plugin>
+
+			<!-- 
+				Within the `tranmission` tag, we need to indicate the name of the motor 
+				and also the robot joint that is connected by this tranmission.
+			-->
 			<actuator name="motor_${number}" role="actuator1" />
 			<joint name="joint_${number}" role="joint1">
+
+				<!-- 
+					`Mechanical_reduction` specifies the transmission ratio that takes 
+					into account the presence of a real mechanical transmission an to
+					express the ratio between the number of rotations performed by
+					the motor and the corresponding number of rotation performed by 
+					the joints and so by the arm.
+					In our cases, as the motor is directly connected to the robot arm,
+					the transmission ratio is one. And so one degree of rotation to 
+					the motor corresponds to one  degree of rotation of the robot arm.
+				-->
 				<mechanical_reduction>1.0</mechanical_reduction>
 			</joint>
 		</transmission>
@@ -304,17 +338,26 @@
 		<limit lower="0.0" upper="${PI/2}" effort="${effort}" velocity="${velocity}"></limit>
 	</joint>
 
-
 	<joint name="joint_6" type="fixed">
 		<parent link="base_link" />
 		<child link="rgb_camera" />
 		<origin rpy="0 -0.5 1.57" xyz="0 0.45 0.2" />
 	</joint>
 
+	<!-- 
+		Since we have 4 movable joints => we have 4 transmissions.
+	-->
 	<xacro:default_transmission number="1"/>
 	<xacro:default_transmission number="2"/>
 	<xacro:default_transmission number="3"/>
 	<xacro:default_transmission number="4"/>
+
+	<!--
+		Now each movable joint of the robot has its own 
+		transmission, we can finally activate the ROS2 control
+		plugin for Gazebo so that we can start the interface
+		between ROS2 control library Gazebo.
+	-->
 
 </robot>
 
