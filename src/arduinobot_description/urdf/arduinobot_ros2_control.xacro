@@ -4,16 +4,73 @@
 
 	<xacro:property name="PI" value="3.14159" />
 
+    <!-- 
+        ros2_control tag used to config and interface the robot's 
+        hardware with the ROS2 control library.
+    -->
     <ros2_control name="RobotSystem" type="system">
+
+        <!-- 
+            Indicate the type of hardware that makes up the system
+            and that we want to interface with the ROS2 control
+            library.
+        -->
         <hardware>
+
+            <!-- 
+                Since we only have the simulated version of the 
+                robot in Gazebo, the hardware is represented by
+                the gazebo itself. So we use the plugin that is 
+                GazeboSystem.
+                This component needs to be changed when we will
+                create our real robot, and so when we are going
+                to need to interface the control system with 
+                the actual hardware. So with the real motors
+                instead of with the gazebo control library.
+            -->
             <plugin>gazebo_ros2_control/GazeboSystem</plugin>
         </hardware>
 
+        <!-- 
+            Now we need to define also the interface that each
+            movable joint of the robot has to use. So we need 
+            to set the interface for each joint that needs to 
+            be controlled by the ROS2 control library.
+        -->
+
         <joint name="joint_1">
+
+            <!-- 
+                To connect the ROS2 control library to the hardware
+                resources, we need to define two interfaces for the
+                communication with the resource itself. Those are
+                `command interface` and `state interface`
+            -->
+
+            <!-- 
+                We use `command_interface` to write to the resource.
+                So typically to send command to the hardware, to 
+                send commands to the motor.`
+                In this case, we want to send position commands to 
+                the motor, telling it to rotate by a certain angle.
+                Therefore, we set the name=position.
+            -->
             <command_interface name="position">
+
+                <!-- 
+                    Set a limit on the commands that we can send to 
+                    each joint of the robot.
+                -->
                 <param name="min">-${PI/2}</param>
                 <param name="max">${PI/2}</param>
             </command_interface>
+
+            <!-- 
+                `state_interface` helps to read the current state
+                of the motor so its position or velocity.
+                We want to know the current position of the 
+                resource. Therefore, set the name=position.
+            -->
             <state_interface name="position">
             </state_interface>
         </joint>
@@ -48,6 +105,13 @@
 
 
         <joint name="joint_5">
+
+            <!-- 
+                To let the control system and also to inform the 
+                ROS2  control library of the relationship of 
+                joint_4 and joint_5, we need to set two 
+                parameters that are mimic and multiplier.
+            -->
             <param name="mimic">joint_4</param>
             <param name="multiplier">-1</param>
             <command_interface name="position">
@@ -60,3 +124,11 @@
 
     </ros2_control>
 </robot>
+
+<!-- 
+    Now we have completed the preparation of the URDF model
+    of the robot to support, and start using the ROS2 
+    control library and interface it with the simulated
+    robot's hardware in Gazebo through the Gazebo ROS2 
+    control plugin.
+-->

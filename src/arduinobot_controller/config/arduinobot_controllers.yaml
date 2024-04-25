@@ -1,13 +1,23 @@
+# A configuration files always start with the name of the node
+# to which the configuration parameters refer to. In our case,
+# we are configuring the `controller_manager` node. 
+
 controller_manager:
   ros__parameters:
-    update_rate: 10  # Hz
+    update_rate: 10  # (Hz), the frequency at which the control loop will be updated and executed.
 
-    arm_controller:
-      type: joint_trajectory_controller/JointTrajectoryController
+    arm_controller:  # name of the controller that we want the controller manager to use and to set up for our robot.
+      # Specify the controller's type which determines the logic used for their control.
+      # This indicates that we want to send trajectory commands to the arm joint, so the commands that we are going 
+      # to send to those joints will contain a list of position at each instant of time.
+      type: joint_trajectory_controller/JointTrajectoryController  
 
     gripper_controller:
       type: joint_trajectory_controller/JointTrajectoryController
 
+    # In addition to these two controllers above, the 
+    # controller manager also needs to load a module 
+    # called `joint_state_broadcaster`.
     # 'joint_state_broadcaster' is responsible for publishing 
     # the current state of each of those joints of the robot
     # into a topic, making them usable by other nodes that 
@@ -15,19 +25,29 @@ controller_manager:
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
+# So far, we have only indicated to the controller manager the names and 
+# the types of the controllers that it should load. Now we need to 
+# configure the parameters of these three controllers above.
+
 arm_controller:
   ros__parameters:
     # Define the list of the joints that are actuated 
-    # by this controller
+    # by this controller. So let's list all the 
+    # joints that are actuated and that belongs to 
+    # the arm.
     joints:
       - joint_1
       - joint_2
       - joint_3
 
-    # We want to send position commands to the arm
+    # We want to send `position` commands to the arm
     command_interfaces:
       - position
-
+    
+    # We also want a `position` state_interface for 
+    # each joint, so we receive feedback on their
+    # current position. In order to receive
+    # feedback, we set the `state_interfaces`.
     state_interfaces:
       - position
 
@@ -49,3 +69,8 @@ gripper_controller:
 
     open_loop_control: true
     allow_integration_in_goal_trajectories: true
+
+# For now, let's proceed to install this file and to 
+# inform the compiler about the existence of the 
+# config folder, and so about this config file in 
+# CMakeLists.txt.

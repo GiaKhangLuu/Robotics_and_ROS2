@@ -127,3 +127,16 @@ ros2 launch name_of_the_package name_of_the_launch_file
 ```
 
 Start the launch file.
+
+```
+ros2 control list_controllers
+```
+
+Obtain a list of all the currently configured and active controllers for our robot. 
+
+```
+ros2 control list_hardware_components
+```
+
+Obtain a list of the hardware components that are currently available and that are
+currently configured to work with the ROS2 control interface.

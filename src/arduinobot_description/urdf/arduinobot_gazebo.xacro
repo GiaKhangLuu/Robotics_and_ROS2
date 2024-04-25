@@ -1,15 +1,24 @@
+<!-- 
+    xacro format allows separating different functionalities of the same URDF
+    model into different files and then include all of them one within 
+    another. 
+-->
+
 <?xml version="1.0"?>
 
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="arduinobot">
 
+    <!-- 
+        Enable the support and the interface within gazebo and ROS2
+        control library.
+    -->
     <gazebo>
         <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
-            <robot_param>robot_description</robot_param>
-            <robot_param_node>robot_state_publisher</robot_param_node>
-            <parameters>$(find arduinobot_controller)/config/arduinobot_controllers.yaml</parameters> 
+            <robot_param>robot_description</robot_param>  <!-- Specify the topic so that the gazebo plugin can access the robot parameters -->
+            <robot_param_node>robot_state_publisher</robot_param_node>  <!-- Specify the node that publish to the specified topic above -->
+            <parameters>$(find arduinobot_controller)/config/arduinobot_controllers.yaml</parameters>  <!-- Specify the name of the file that contains the configuration parameter for the ROS2 control library in gazebo -->
         </plugin>
 
     </gazebo>
-
 
 </robot>
