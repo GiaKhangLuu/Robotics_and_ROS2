@@ -1,6 +1,17 @@
+# Creating a new message interface for the 
+# communication with the service server.
+# In this file, we need to define
+# a structure of a request message and
+# also a structure of a response message.
+
 #Request 
 int64 a
 int64 b
 ---
 #Response
 int64 sum
+
+# We have completed the definition of the `AddTwoInts`.
+# In order to use it, we need also to declare it 
+# inside the CMakeLists.txt so that the compiler is
+# aware of the existence of this message interface.

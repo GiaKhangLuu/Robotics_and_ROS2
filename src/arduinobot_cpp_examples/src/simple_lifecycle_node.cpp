@@ -1,3 +1,4 @@
+/*
 #include <rclcpp/rclcpp.hpp>
 #include <rclcpp_lifecycle/lifecycle_node.hpp>
 #include <std_msgs/msg/string.hpp>
@@ -92,4 +93,4 @@ int main(int argc, char * argv[])
   rclcpp::shutdown();
 
   return 0;
-}
+}*/

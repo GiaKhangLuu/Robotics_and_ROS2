@@ -140,3 +140,34 @@ ros2 control list_hardware_components
 
 Obtain a list of the hardware components that are currently available and that are
 currently configured to work with the ROS2 control interface.
+
+```
+ros2 run tf2_tools view_frames
+```
+
+Run `view_frames` node from the `tf2_tools` library that allows us to graphically
+visualize the frames and their connection in a tree structure. 
+
+```
+ros2 run tf2_ros tf2_echo name_of_ref_frame_1 name_of_ref_frame_2
+```
+
+Display the transformation matrix between any two frames.
+
+```
+ros2 service list
+```
+
+List all the current availabel services
+
+```
+ros2 service type name_of_a_service
+```
+
+Get a type of the communication interface that the service `name_of_a_service` is using.
+
+```
+ros2 service call name_of_a_service type_of_message_interface content_of_the_message
+```
+
+Send a request message to the service `name_of_a_service`.
