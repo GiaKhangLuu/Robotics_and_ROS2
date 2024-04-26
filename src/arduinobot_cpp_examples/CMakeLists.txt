@@ -42,18 +42,18 @@ ament_target_dependencies(simple_service_client rclcpp arduinobot_msgs)
 add_executable(simple_moveit_interface src/simple_moveit_interface.cpp)
 ament_target_dependencies(simple_moveit_interface rclcpp moveit_ros_planning_interface)
 
-add_library(simple_action_server SHARED src/simple_action_server.cpp)
+add_library(simple_action_server SHARED src/simple_action_server.cpp)  # add a new library that is called simple_action_server
 target_include_directories(simple_action_server PRIVATE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
 target_compile_definitions(simple_action_server
   PRIVATE "SIMPLE_ACTION_SERVER_CPP_BUILDING_DLL")
-ament_target_dependencies(simple_action_server
+ament_target_dependencies(simple_action_server  # add dependencies of the library
   "arduinobot_msgs"
   "rclcpp"
   "rclcpp_action"
   "rclcpp_components")
-rclcpp_components_register_node(simple_action_server
+rclcpp_components_register_node(simple_action_server  # registering that implements the action server which is the one that is in the arduinobot_cpp_exmaples namespace and is implemented in the class SimpleActionServer
   PLUGIN "arduinobot_cpp_examples::SimpleActionServer"
   EXECUTABLE simple_action_server_node
 )

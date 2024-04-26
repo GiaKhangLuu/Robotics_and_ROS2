@@ -171,3 +171,22 @@ ros2 service call name_of_a_service type_of_message_interface content_of_the_mes
 ```
 
 Send a request message to the service `name_of_a_service`.
+
+```
+ros2 action list
+```
+
+List all of the currently availabel actions in ROS2.
+
+```
+ros2 action info name_of_action_server -t
+```
+
+Get the information about the action server called `name_of_action_server`. The flag `-t` used 
+to display also the type of the message interface to communicate with this action server.
+
+```
+ros2 action send_goal name_of_action_server interface_message content_of_the_message -f
+```
+
+Send goal to the action server. The flag `-f` used to display the feedback.

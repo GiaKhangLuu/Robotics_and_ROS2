@@ -15,6 +15,11 @@ class SimpleActionClient : public rclcpp::Node
     public:
         explicit SimpleActionClient(const rclcpp::NodeOptions& options) : Node("simple_action_client", options)
         {
+            /*
+            create_client() function takes two inputs.
+            1: The instance of ROS2 Node that contains the action client. So actually this is the current object, so we set `this`. 
+            2: The name of the action server.
+            */
             client_ = rclcpp_action::create_client<arduinobot_msgs::action::Fibonacci>(
                 this,
                 "fibonacci"
@@ -25,10 +30,13 @@ class SimpleActionClient : public rclcpp::Node
     
     private:
         rclcpp_action::Client<arduinobot_msgs::action::Fibonacci>::SharedPtr client_;
-        rclcpp::TimerBase::SharedPtr timer_;
+        rclcpp::TimerBase::SharedPtr timer_; // this object repeatedly execute a certain function at regular time intervals
 
         void timerCallback()
         {
+            // We dont need this function to be executed repeatedly every second, we need it just to be executed once.
+            // So just the first time, so whenever we execute it for the first time, let's cancel it so that it will
+            // not be executed again => This callback function is executed only once.
             timer_->cancel();
 
             /* Verifying that the action server is running */
@@ -77,7 +85,8 @@ class SimpleActionClient : public rclcpp::Node
             */
             send_goal_options.result_callback = std::bind(&SimpleActionClient::resultCallback,
                                                           this,
-                                                          _1);                                                  
+                                                          _1);     
+
             /* Finally, send the goal to the action server */
             client_->async_send_goal(goal_msg, send_goal_options);
         }

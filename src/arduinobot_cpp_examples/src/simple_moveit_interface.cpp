@@ -1,3 +1,10 @@
+/*
+Create a simple script, a simple C++ node that use the Moveit2 APIs to send a goal to our
+robot and move it to the desired position.
+
+Alan Luu: 2024/04/26.
+*/
+
 #include <rclcpp/rclcpp.hpp>
 #include <moveit/move_group_interface/move_group_interface.h>
 
