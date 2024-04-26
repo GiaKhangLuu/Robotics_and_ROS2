@@ -1,3 +1,14 @@
+"""
+At this point, Moveit2 is configured and also supports our robot. So now we can finally start 
+using its amazing features to move the robot's end effector from the starting point to the
+end point. And also to plan and execute trajectories to launch this software with the 
+configuration that we have created. 
+
+Now we create a new launch file.
+
+Alan Luu: 2024/04/26.
+"""
+
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
@@ -13,7 +24,9 @@ def generate_launch_description():
     executed when we start the launch file, so when 
     we start the application
     """
-    
+
+    # `is_sim` argument indicates whether or not we are starting the Moveit functionalities
+    # for the simulation in gazebot or for the real robot.
     is_sim_arg = DeclareLaunchArgument(
         "is_sim",
         default_value="True"
@@ -21,6 +34,7 @@ def generate_launch_description():
 
     is_sim = LaunchConfiguration("is_sim")
 
+    # Declare configuration based on the files that we created in the previous lesson.
     moveit_config = (
         MoveItConfigsBuilder("arduinobot", package_name="arduinobot_moveit")
         .robot_description(file_path=os.path.join(get_package_share_directory("arduinobot_description"), "urdf", "arduinobot.urdf.xacro"))
@@ -32,7 +46,6 @@ def generate_launch_description():
     moveit_config_dict = moveit_config.to_dict()
     # Remove keys with None values
     moveit_config_dict = {key: value for key, value in moveit_config_dict .items() if value is not None}
-
 
     move_group_node = Node(
         package="moveit_ros_move_group",
@@ -61,3 +74,8 @@ def generate_launch_description():
         move_group_node,
         rviz_node
     ])
+
+"""
+Now let's go into the CMakeLists.txt to in order to install the config launch folder, so that
+these folders are recognized in ROS2.
+"""

@@ -1,6 +1,12 @@
+# This configuration file helps to connect the moveit library with the ROS2 control library that we have 
+# already configured for our robot and therefore with the controllers that we used to move the robot's
+# joints.
+
 moveit_controller_manager: moveit_simple_controller_manager/MoveItSimpleControllerManager
 
 moveit_simple_controller_manager:
+
+  # There are two controllers actually that we want to control our robot: arm_controller and gripper_controller
   controller_names:
     - arm_controller
     - gripper_controller

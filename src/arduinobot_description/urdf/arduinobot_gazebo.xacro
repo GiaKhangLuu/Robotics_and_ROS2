@@ -1,10 +1,10 @@
+<?xml version="1.0"?>
 <!-- 
     xacro format allows separating different functionalities of the same URDF
     model into different files and then include all of them one within 
     another. 
 -->
 
-<?xml version="1.0"?>
 
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="arduinobot">
 
