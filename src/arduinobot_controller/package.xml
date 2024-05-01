@@ -8,7 +8,13 @@
   <license>TODO: License declaration</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
-  
+
+  <depend>hardware_interface</depend>
+  <depend>rclcpp</depend>
+  <depend>rclcpp_lifecycle</depend>
+  <depend>pluginlib</depend>
+  <depend>libserial-dev</depend>
+
   <!-- 
     List all the dependencies, including all the packages
     that we have used.

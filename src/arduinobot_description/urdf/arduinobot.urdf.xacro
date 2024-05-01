@@ -3,6 +3,8 @@
 <!-- We are using the xacro format, not plain urdf => we need to indicate where the definition of this format is located  -->
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="arduinobot">
 
+	<xacro:arg name="is_sim" default="true" />
+
 	<!-- Include within this model the new file that we have created. -->
 	<xacro:include filename="$(find arduinobot_description)/urdf/arduinobot_gazebo.xacro" />
 	<xacro:include filename="$(find arduinobot_description)/urdf/arduinobot_ros2_control.xacro" />
